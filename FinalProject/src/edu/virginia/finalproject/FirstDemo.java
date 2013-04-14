@@ -58,6 +58,8 @@ public class FirstDemo extends Screen {
 		Location.distanceBetween(loc.getLatitude(), loc.getLongitude(), 38.032966,
 				-78.514148, dist);
 		distance.setText(dist[0] + "");
+		
+		presentScreen(WelcomeScreen.class, new WelcomeScreen());
 	}
 
 	// ----------------------------------------------------------
