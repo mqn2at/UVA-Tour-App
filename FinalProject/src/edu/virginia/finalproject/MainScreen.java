@@ -1,5 +1,9 @@
 package edu.virginia.finalproject;
 
+import java.util.ArrayList;
+
+import edu.virginia.finalproject.FirstDemo.GPS;
+
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
@@ -30,90 +34,100 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FirstDemo extends Screen {
-	private EditText currX;
-	private EditText currY;
-	private EditText targetX;
-	private EditText targetY;
-	private EditText distance;
-	private EditText status;
-	private TextView textView1;
+public class MainScreen extends Screen {
+	private TextView currLat;
+	private TextView currLong;
+	private TextView destLat;
+	private TextView destLong;
+	private TextView dist;
+	private TextView status;
+	private TextView timeElapsed;
 
-	private FirstDemoModel model;
+	private MainModel model;
 	private LocationManager locMan;
+	private GPS gps;
+	private int time = 0;
+	private ArrayList<Stop> stops;
+	private int currentStop = 0;
 
 	public void initialize() {
-		model = new FirstDemoModel();
+		model = new MainModel();
 		model.addObserver(this);
-		model.setTargetX(38.032966);
-		model.setTargetY(-78.514148);
-		/*
-		targetX.setText(String.format("%.6f", model.getTargetX()));
-		targetY.setText(String.format("%.6f", model.getTargetY()));
 
-		GPS gps = new GPS(this);
+		currentStop = 0;
+		stops = new ArrayList<Stop>();
+		Stop afc = new Stop("AFC", 38.032966, -78.514148);
+		Stop ohill = new Stop("OHill Dining Hall", 38.034817, -78.514599);
+		Stop gilmer = new Stop("Gilmer", 38.034411, -78.512764);
+		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629);
+		Stop clark = new Stop("Clark", 38.033574, -78.507625);
+		Stop amphitheatre = new Stop("Amphitheater", 38.033617, -78.505822);
+		stops.add(afc);
+		stops.add(ohill);
+		stops.add(gilmer);
+		stops.add(rice);
+		stops.add(clark);
+		stops.add(amphitheatre);
+
+		destLat.setText(String.format("%.6f", stops.get(currentStop)
+				.getLatitude()));
+		destLong.setText(String.format("%.6f", stops.get(currentStop)
+				.getLongitude()));
+
+		model.setdestLat(stops.get(currentStop).getLatitude());
+		model.setdestLong(stops.get(currentStop).getLongitude());
+
+		gps = new GPS(this);
 		Location loc = gps.getLocation();
-		currX.setText(String.format("%.6f", loc.getLatitude()));
-		currY.setText(String.format("%.6f", loc.getLongitude()));
-		float[] dist = new float[1];
-		Location.distanceBetween(loc.getLatitude(), loc.getLongitude(), 38.032966,
-				-78.514148, dist);
-		distance.setText(dist[0] + "");
-		*/
+		updatePosition(loc);
+
 		presentScreen(WelcomeScreen.class, new WelcomeScreen());
+		Timer.callRepeatedly(this, "clock", 1000);
+	}
+	
+	public void clock(){
+		time++;
+		int hour = time/3600;
+		int min = time%3600/60;
+		int sec = time%60;
+		String h = hour+"";
+		String m = min+"";
+		String s = sec+"";
+		if(m.length() < 2){
+			m = "0"+m;
+		}
+		if(s.length() < 2){
+			s = "0"+s;
+		}
+		timeElapsed.setText(h+":"+m+":"+s);
+	}
+
+	public void updatePosition(Location loc) {
+		double lat = loc.getLatitude();
+		double lon = loc.getLongitude();
+		currLat.setText(String.format("%.6f", lat));
+		currLong.setText(String.format("%.6f", lon));
 		
-	}
+		float[] distance = new float[1];
+		Location.distanceBetween(lat, lon,
+				stops.get(currentStop).getLatitude(), stops.get(currentStop)
+						.getLongitude(), distance);
+		dist.setText(String.format("%.3f", distance[0]));
 
-	// ----------------------------------------------------------
-	/**
-	 * Called when the user has committed an editing operation in the widget
-	 * with ID "billAmount", by pressing the "Done" or "Enter" key on their
-	 * device's keyboard.
-	 */
-	public void currXEditingDone() {
-		float x;
-		try {
-			x = Float.parseFloat(currX.getText().toString());
-		}
-		catch (NumberFormatException e) {
-			x = 0.0f;
-		}
-
-		model.setCurrX(x);
-	}
-
-	public void currYEditingDone() {
-		float y;
-		try {
-			y = Float.parseFloat(currY.getText().toString());
-		}
-		catch (NumberFormatException e) {
-			y = 0.0f;
-		}
-
-		model.setCurrY(y);
-	}
-
-	@SuppressLint("DefaultLocale")
-	public void changeWasObserved(FirstDemoModel model) {
-		double dist = model.getDistance();
-		String d = String.format("%.2f", dist);
 		String s;
-		if (dist < 5) {
+		if (distance[0] < 5) {
 			s = "hot";
 		}
-		else if (dist > 200) {
+		else if (distance[0] > 200) {
 			s = "cold";
 		}
-		else if (dist >= 70) {
+		else if (distance[0] >= 70) {
 			s = "cool";
 		}
 		else {
 			s = "warm";
 		}
 		status.setText(s);
-		// distance.setText(d);
-		
 	}
 
 	public class GPS extends Service implements LocationListener {
@@ -134,10 +148,10 @@ public class FirstDemo extends Screen {
 		double longitude; // longitude
 
 		// The minimum distance to change Updates in meters
-		private static final long MIN_DIST = 10; // 10 meters
+		private static final long MIN_DIST = 1; // 1 meters
 
 		// The minimum time between updates in milliseconds
-		private static final long MIN_TIME = 1000 * 60 * 1; // 1 minute
+		private static final long MIN_TIME = 1000; // 1 second
 
 		// Declaring a Location Manager
 		protected LocationManager locationManager;
@@ -235,28 +249,7 @@ public class FirstDemo extends Screen {
 
 		@Override
 		public void onLocationChanged(Location location) {
-			/*
-			currX.setText(String.format("%.6f", location.getLatitude()));
-			currY.setText(String.format("%.6f", location.getLongitude()));
-			float[] dist = new float[1];
-			Location.distanceBetween(location.getLatitude(), location.getLongitude(), 38.032966,
-					-78.514148, dist);
-			distance.setText(dist[0] + "");
-			String s;
-			if (dist[0] < 5) {
-				s = "hot";
-			}
-			else if (dist[0] > 200) {
-				s = "cold";
-			}
-			else if (dist[0] >= 70) {
-				s = "cool";
-			}
-			else {
-				s = "warm";
-			}
-			status.setText(s);
-			*/
+			//updatePosition(location);
 		}
 
 		@Override
@@ -277,5 +270,4 @@ public class FirstDemo extends Screen {
 		}
 
 	}
-
 }
