@@ -2,8 +2,6 @@ package edu.virginia.finalproject;
 
 import java.util.ArrayList;
 
-import edu.virginia.finalproject.FirstDemo.GPS;
-
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
@@ -37,23 +35,22 @@ import android.widget.Toast;
 public class MainScreen extends Screen {
 	private TextView currLat;
 	private TextView currLong;
+	private TextView destName;
 	private TextView destLat;
 	private TextView destLong;
 	private TextView dist;
 	private TextView status;
 	private TextView timeElapsed;
 
-	private MainModel model;
+	// private MainModel model;
 	private LocationManager locMan;
 	private GPS gps;
+	private Timer timer;
 	private int time = 0;
 	private ArrayList<Stop> stops;
 	private int currentStop = 0;
 
 	public void initialize() {
-		model = new MainModel();
-		model.addObserver(this);
-
 		currentStop = 0;
 		stops = new ArrayList<Stop>();
 		Stop afc = new Stop("AFC", 38.032966, -78.514148);
@@ -69,37 +66,41 @@ public class MainScreen extends Screen {
 		stops.add(clark);
 		stops.add(amphitheatre);
 
+		destName.setText(stops.get(currentStop).getName());
 		destLat.setText(String.format("%.6f", stops.get(currentStop)
 				.getLatitude()));
 		destLong.setText(String.format("%.6f", stops.get(currentStop)
 				.getLongitude()));
-
-		model.setdestLat(stops.get(currentStop).getLatitude());
-		model.setdestLong(stops.get(currentStop).getLongitude());
 
 		gps = new GPS(this);
 		Location loc = gps.getLocation();
 		updatePosition(loc);
 
 		presentScreen(WelcomeScreen.class, new WelcomeScreen());
-		Timer.callRepeatedly(this, "clock", 1000);
+		timer.callRepeatedly(this, "clock", 1000);
 	}
-	
-	public void clock(){
+
+	public void clock() {
+		Location loc = gps.getLocation();
+		updatePosition(loc);
+
 		time++;
-		int hour = time/3600;
-		int min = time%3600/60;
-		int sec = time%60;
-		String h = hour+"";
-		String m = min+"";
-		String s = sec+"";
-		if(m.length() < 2){
-			m = "0"+m;
+		int hour = time / 3600;
+		int min = time % 3600 / 60;
+		int sec = time % 60;
+		String h = hour + "";
+		String m = min + "";
+		String s = sec + "";
+		if (h.length() < 2) {
+			h = "0" + h;
 		}
-		if(s.length() < 2){
-			s = "0"+s;
+		if (m.length() < 2) {
+			m = "0" + m;
 		}
-		timeElapsed.setText(h+":"+m+":"+s);
+		if (s.length() < 2) {
+			s = "0" + s;
+		}
+		timeElapsed.setText(h + ":" + m + ":" + s);
 	}
 
 	public void updatePosition(Location loc) {
@@ -107,7 +108,7 @@ public class MainScreen extends Screen {
 		double lon = loc.getLongitude();
 		currLat.setText(String.format("%.6f", lat));
 		currLong.setText(String.format("%.6f", lon));
-		
+
 		float[] distance = new float[1];
 		Location.distanceBetween(lat, lon,
 				stops.get(currentStop).getLatitude(), stops.get(currentStop)
@@ -128,6 +129,36 @@ public class MainScreen extends Screen {
 			s = "warm";
 		}
 		status.setText(s);
+
+		if (distance[0] < 50) {
+			destinationReached();
+		}
+	}
+
+	public void destinationReached() {
+		currentStop++;
+		if (currentStop >= stops.size()) {
+			// present congratulatory screen
+			timer.stop();
+			CongratsScreen end = new CongratsScreen();
+			end.setTime(timeElapsed.getText() + "");
+			presentScreen(CongratsScreen.class, end);
+			// kill app
+			Timer.callOnce(this, "finish", 0);
+		}
+		else {
+			// present info screen
+
+			// update with new coordinates
+			destName.setText(stops.get(currentStop).getName());
+			destLat.setText(String.format("%.6f", stops.get(currentStop)
+					.getLatitude()));
+			destLong.setText(String.format("%.6f", stops.get(currentStop)
+					.getLongitude()));
+
+			Location loc = gps.getLocation();
+			updatePosition(loc);
+		}
 	}
 
 	public class GPS extends Service implements LocationListener {
@@ -249,7 +280,7 @@ public class MainScreen extends Screen {
 
 		@Override
 		public void onLocationChanged(Location location) {
-			//updatePosition(location);
+			// updatePosition(location);
 		}
 
 		@Override
@@ -268,6 +299,5 @@ public class MainScreen extends Screen {
 		public IBinder onBind(Intent arg0) {
 			return null;
 		}
-
 	}
 }

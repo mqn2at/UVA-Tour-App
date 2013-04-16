@@ -61,7 +61,7 @@
         android:layout_alignLeft="@+id/textView3"
         android:layout_below="@+id/textView3"
         android:layout_marginTop="26dp"
-        android:text="Destination Location:"
+        android:text="Destination:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -157,6 +157,16 @@
         android:layout_alignBottom="@+id/textView9"
         android:layout_alignLeft="@+id/status"
         android:text="00:00:00"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/destName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_alignLeft="@+id/destLat"
+        android:text="Place"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
