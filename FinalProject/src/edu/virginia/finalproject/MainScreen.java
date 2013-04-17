@@ -50,7 +50,7 @@ public class MainScreen extends Screen {
 	private ArrayList<Stop> stops;
 	private int currentStop = 0;
 
-	public void initialize() {
+	public void initialize(MainScreen mainscreen) {
 		currentStop = 0;
 		stops = new ArrayList<Stop>();
 		Stop afc = new Stop("AFC", 38.032966, -78.514148);
@@ -148,6 +148,15 @@ public class MainScreen extends Screen {
 		}
 		else {
 			// present info screen
+			if (currentStop == 1) {
+				
+			}
+			if (currentStop == 2) {
+				presentScreen(Ohill.class, new Ohill());
+			}
+			if (currentStop == 3) {
+				
+			}
 
 			// update with new coordinates
 			destName.setText(stops.get(currentStop).getName());
