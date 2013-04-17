@@ -1,13 +1,15 @@
 package edu.virginia.finalproject;
 
+import sofia.util.Timer;
+
 import sofia.app.Screen;
 
-public class Ohill extends Screen{
-	public void initialize (Ohill ohill) {
-		
+public class Ohill extends Screen {
+	public void initialize(Ohill ohill) {
+		Timer.callOnce(this, "finish", 4000);
 	}
-	
+
 	public void doneButtonClicked() {
-		presentScreen(MainScreen.class, new MainScreen());
+		Timer.callOnce(this, "finish", 0);
 	}
 }

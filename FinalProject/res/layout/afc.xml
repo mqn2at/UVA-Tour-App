@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
-        android:src="@drawable/AFC" />
+        android:src="@drawable/afc" />
 
     <Button
         android:id="@+id/doneButton1"

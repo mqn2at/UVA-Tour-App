@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:src="@drawable/OhillDiningEntry" />
+        android:src="@drawable/ohill_dining" />
 
     <Button
         android:id="@+id/doneButton"

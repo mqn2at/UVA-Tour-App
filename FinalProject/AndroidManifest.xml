@@ -23,6 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name="edu.virginia.finalproject.WelcomeScreen" />
+        <activity android:name="edu.virginia.finalproject.CongratsScreen" />
+        <activity android:name="edu.virginia.finalproject.AFC" />
+        <activity android:name="edu.virginia.finalproject.Ohill" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

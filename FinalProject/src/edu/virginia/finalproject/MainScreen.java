@@ -50,7 +50,7 @@ public class MainScreen extends Screen {
 	private ArrayList<Stop> stops;
 	private int currentStop = 0;
 
-	public void initialize(MainScreen mainscreen) {
+	public void initialize() {
 		currentStop = 0;
 		stops = new ArrayList<Stop>();
 		Stop afc = new Stop("AFC", 38.032966, -78.514148);
@@ -77,7 +77,8 @@ public class MainScreen extends Screen {
 		updatePosition(loc);
 
 		presentScreen(WelcomeScreen.class, new WelcomeScreen());
-		timer.callRepeatedly(this, "clock", 1000);
+
+		timer = Timer.callRepeatedly(this, "clock", 1000);
 	}
 
 	public void clock() {
@@ -101,6 +102,11 @@ public class MainScreen extends Screen {
 			s = "0" + s;
 		}
 		timeElapsed.setText(h + ":" + m + ":" + s);
+
+		if (time == 5) {
+			presentScreen(AFC.class, new AFC());
+			//presentScreen(Ohill.class, new Ohill());
+		}
 	}
 
 	public void updatePosition(Location loc) {
@@ -141,7 +147,7 @@ public class MainScreen extends Screen {
 			// present congratulatory screen
 			timer.stop();
 			CongratsScreen end = new CongratsScreen();
-			end.setTime(timeElapsed.getText() + "");
+			end.setTime(time);
 			presentScreen(CongratsScreen.class, end);
 			// kill app
 			Timer.callOnce(this, "finish", 0);
@@ -149,15 +155,20 @@ public class MainScreen extends Screen {
 		else {
 			// present info screen
 			if (currentStop == 1) {
-				
+				presentScreen(AFC.class, new AFC());
 			}
 			if (currentStop == 2) {
 				presentScreen(Ohill.class, new Ohill());
 			}
 			if (currentStop == 3) {
-				
-			}
 
+			}
+			if (currentStop == 4) {
+
+			}
+			if (currentStop == 5) {
+
+			}
 			// update with new coordinates
 			destName.setText(stops.get(currentStop).getName());
 			destLat.setText(String.format("%.6f", stops.get(currentStop)
