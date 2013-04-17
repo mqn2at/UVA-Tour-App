@@ -4,12 +4,12 @@ import sofia.util.Timer;
 
 import sofia.app.Screen;
 
-public class AFC extends Screen{
-	public void initialize (AFC afc) {
+public class Amphitheater extends Screen {
+	public void initialize(Amphitheater amphitheater) {
 		Timer.callOnce(this, "finish", 4000);
 	}
-	
-	public void doneButton1Clicked() {
+
+	public void doneButton4Clicked() {
 		Timer.callOnce(this, "finish", 0);
 	}
 }

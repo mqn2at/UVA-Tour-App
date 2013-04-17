@@ -161,13 +161,16 @@ public class MainScreen extends Screen {
 				presentScreen(Ohill.class, new Ohill());
 			}
 			if (currentStop == 3) {
-
+				presentScreen(Gilmer.class, new Gilmer());
 			}
 			if (currentStop == 4) {
-
+				presentScreen(Rice.class, new Rice());
 			}
 			if (currentStop == 5) {
-
+				presentScreen(Clark.class, new Clark());
+			}
+			if (currentStop == 6) {
+				presentScreen(Amphitheater.class, new Amphitheater());
 			}
 			// update with new coordinates
 			destName.setText(stops.get(currentStop).getName());
