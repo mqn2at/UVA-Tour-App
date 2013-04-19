@@ -58,13 +58,13 @@ public class MainScreen extends Screen {
 		stops = new ArrayList<Stop>();
 		Stop afc = new Stop("AFC", 38.032966, -78.514148);
 		Stop ohill = new Stop("OHill Dining Hall", 38.034817, -78.514599);
-		Stop gilmer = new Stop("Gilmer", 38.034411, -78.512764);
+		Stop rotunda = new Stop("Rotunda", 38.035366, -78.503537);
 		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629); // check
 		Stop clark = new Stop("Clark", 38.033574, -78.507625);
 		Stop amphitheatre = new Stop("Amphitheater", 38.033617, -78.505822);
 		stops.add(afc);
 		stops.add(ohill);
-		stops.add(gilmer);
+		stops.add(rotunda);
 		stops.add(rice);
 		stops.add(clark);
 		stops.add(amphitheatre);
@@ -169,7 +169,7 @@ public class MainScreen extends Screen {
 				presentScreen(Ohill.class, new Ohill());
 			}
 			if (currentStop == 3) {
-				presentScreen(Gilmer.class, new Gilmer());
+				presentScreen(Rotunda.class, new Rotunda());
 			}
 			if (currentStop == 4) {
 				presentScreen(Rice.class, new Rice());
@@ -180,7 +180,7 @@ public class MainScreen extends Screen {
 			if (currentStop == 6) {
 				presentScreen(Amphitheater.class, new Amphitheater());
 			}
-			
+
 			// update with new coordinates
 			destName.setText(stops.get(currentStop).getName());
 			destLat.setText(String.format("%.6f", stops.get(currentStop)

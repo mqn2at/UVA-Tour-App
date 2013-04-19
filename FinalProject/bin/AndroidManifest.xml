@@ -26,6 +26,10 @@
         <activity android:name="edu.virginia.finalproject.CongratsScreen" />
         <activity android:name="edu.virginia.finalproject.AFC" />
         <activity android:name="edu.virginia.finalproject.Ohill" />
+        <activity android:name="edu.virginia.finalproject.Clark" />
+        <activity android:name="edu.virginia.finalproject.Rice" />
+        <activity android:name="edu.virginia.finalproject.Rotunda" />
+        <activity android:name="edu.virginia.finalproject.Amphitheater" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

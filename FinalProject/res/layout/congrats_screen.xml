@@ -9,16 +9,6 @@
     tools:context=".CongratsScreen" >
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="139dp"
-        android:text="CONGRATULATIONS"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +16,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         android:text="Time Taken:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/clock"
@@ -35,7 +26,8 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:text="00:00:00"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -45,6 +37,28 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
         android:text="You have finished the tour."
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="30dp" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textView4"
+        android:layout_below="@+id/textView4"
+        android:src="@drawable/cavalier" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="CONGRATULATIONS"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="50dp" />
     
 </RelativeLayout>

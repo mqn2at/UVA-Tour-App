@@ -3,13 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="16dp"
+        android:text="You have reached the AFC"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:src="@drawable/afc" />
 
     <Button
@@ -18,7 +28,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="24dp"
         android:text="Return" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="51dp"
+        android:text="The Aquatic &amp; Fitness Center was built in 1996. The original facility consisted of the natatorium, main fitness gallery, one multipurpose room, and the Intramural Recreational Sports Business Office. In 2004 the facility was renovated to add the three court gymnasium, a free weight room expansion, 2 multipurpose rooms, a cycle studio and massage therapy rooms. The Aquatic &amp; Fitness Center is home to both the UVA Men&apos;s and Women&apos;s Swimming and Diving Teams. "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
