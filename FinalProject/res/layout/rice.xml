@@ -12,7 +12,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="0dp"
-        android:src="@drawable/Rice" />
+        android:src="@drawable/rice" />
 
     <Button
         android:id="@+id/doneButton4"

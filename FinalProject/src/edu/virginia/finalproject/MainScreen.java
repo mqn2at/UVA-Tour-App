@@ -1,5 +1,4 @@
 package edu.virginia.finalproject;
-
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
@@ -41,6 +40,8 @@ public class MainScreen extends Screen {
 	private TextView dist;
 	private TextView status;
 	private TextView timeElapsed;
+	private EditText editLat;
+	private EditText editLong;
 
 	// private MainModel model;
 	private LocationManager locMan;
@@ -49,6 +50,8 @@ public class MainScreen extends Screen {
 	private int time = 0;
 	private ArrayList<Stop> stops;
 	private int currentStop = 0;
+	private boolean usingGPS = true;
+	private double lat, lon;
 
 	public void initialize() {
 		currentStop = 0;
@@ -77,7 +80,6 @@ public class MainScreen extends Screen {
 		updatePosition(loc);
 
 		presentScreen(WelcomeScreen.class, new WelcomeScreen());
-
 		timer = Timer.callRepeatedly(this, "clock", 1000);
 	}
 
@@ -102,16 +104,30 @@ public class MainScreen extends Screen {
 			s = "0" + s;
 		}
 		timeElapsed.setText(h + ":" + m + ":" + s);
-
+		///for debugging
+		/*
 		if (time == 5) {
-			presentScreen(AFC.class, new AFC());
-			//presentScreen(Ohill.class, new Ohill());
+			// presentScreen(AFC.class, new AFC());
+			// presentScreen(Ohill.class, new Ohill());
+			// presentScreen(MainScreen.class,this);
+			CongratsScreen end = new CongratsScreen();
+			// end.setTime(time); FIX
+			presentScreen(CongratsScreen.class, end);
+			finish();
 		}
+		*/
 	}
 
 	public void updatePosition(Location loc) {
-		double lat = loc.getLatitude();
-		double lon = loc.getLongitude();
+		//double lat, lon;
+		if (usingGPS) {
+			lat = loc.getLatitude();
+			lon = loc.getLongitude();
+		}
+		else {
+			lat = Double.parseDouble(editLat.getText()+"");
+			lon = Double.parseDouble(editLong.getText()+"");
+		}
 		currLat.setText(String.format("%.6f", lat));
 		currLong.setText(String.format("%.6f", lon));
 
@@ -183,6 +199,16 @@ public class MainScreen extends Screen {
 			updatePosition(loc);
 		}
 	}
+	
+	//GPS button
+	public void gpsButtonClicked(){
+		usingGPS = true;
+	}
+	
+	//Manual button
+	public void manualButtonClicked(){
+		usingGPS = false;
+	}
 
 	public class GPS extends Service implements LocationListener {
 
@@ -214,6 +240,7 @@ public class MainScreen extends Screen {
 			this.mContext = context;
 		}
 
+		//gets Location object for current location
 		public Location getLocation() {
 			try {
 				locationManager = (LocationManager) mContext
@@ -271,13 +298,6 @@ public class MainScreen extends Screen {
 			}
 
 			return location;
-		}
-
-		// method to stop using the GPS
-		public void stopUsingGPS() {
-			if (locationManager != null) {
-				locationManager.removeUpdates(GPS.this);
-			}
 		}
 
 		// returns the Latitude coordinate
