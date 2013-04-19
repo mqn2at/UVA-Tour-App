@@ -1,4 +1,5 @@
 package edu.virginia.finalproject;
+
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
@@ -43,7 +44,6 @@ public class MainScreen extends Screen {
 	private EditText editLat;
 	private EditText editLong;
 
-	// private MainModel model;
 	private LocationManager locMan;
 	private GPS gps;
 	private Timer timer;
@@ -59,7 +59,7 @@ public class MainScreen extends Screen {
 		Stop afc = new Stop("AFC", 38.032966, -78.514148);
 		Stop ohill = new Stop("OHill Dining Hall", 38.034817, -78.514599);
 		Stop gilmer = new Stop("Gilmer", 38.034411, -78.512764);
-		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629);
+		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629); // check
 		Stop clark = new Stop("Clark", 38.033574, -78.507625);
 		Stop amphitheatre = new Stop("Amphitheater", 38.033617, -78.505822);
 		stops.add(afc);
@@ -104,29 +104,23 @@ public class MainScreen extends Screen {
 			s = "0" + s;
 		}
 		timeElapsed.setText(h + ":" + m + ":" + s);
-		///for debugging
-		/*
-		if (time == 5) {
-			// presentScreen(AFC.class, new AFC());
-			// presentScreen(Ohill.class, new Ohill());
-			// presentScreen(MainScreen.class,this);
-			CongratsScreen end = new CongratsScreen();
-			// end.setTime(time); FIX
-			presentScreen(CongratsScreen.class, end);
-			finish();
-		}
-		*/
 	}
 
 	public void updatePosition(Location loc) {
-		//double lat, lon;
+		// double lat, lon;
 		if (usingGPS) {
 			lat = loc.getLatitude();
 			lon = loc.getLongitude();
 		}
 		else {
-			lat = Double.parseDouble(editLat.getText()+"");
-			lon = Double.parseDouble(editLong.getText()+"");
+			try {
+				lat = Double.parseDouble(editLat.getText() + "");
+				lon = Double.parseDouble(editLong.getText() + "");
+			}
+			catch (Exception e) {
+				lat = 0.0;
+				lon = 0.0;
+			}
 		}
 		currLat.setText(String.format("%.6f", lat));
 		currLong.setText(String.format("%.6f", lon));
@@ -162,11 +156,9 @@ public class MainScreen extends Screen {
 		if (currentStop >= stops.size()) {
 			// present congratulatory screen
 			timer.stop();
-			CongratsScreen end = new CongratsScreen();
-			end.setTime(time);
-			presentScreen(CongratsScreen.class, end);
+			presentScreen(CongratsScreen.class, timeElapsed.getText());
 			// kill app
-			Timer.callOnce(this, "finish", 0);
+			finish();
 		}
 		else {
 			// present info screen
@@ -188,6 +180,7 @@ public class MainScreen extends Screen {
 			if (currentStop == 6) {
 				presentScreen(Amphitheater.class, new Amphitheater());
 			}
+			
 			// update with new coordinates
 			destName.setText(stops.get(currentStop).getName());
 			destLat.setText(String.format("%.6f", stops.get(currentStop)
@@ -199,14 +192,14 @@ public class MainScreen extends Screen {
 			updatePosition(loc);
 		}
 	}
-	
-	//GPS button
-	public void gpsButtonClicked(){
+
+	// GPS button
+	public void gpsButtonClicked() {
 		usingGPS = true;
 	}
-	
-	//Manual button
-	public void manualButtonClicked(){
+
+	// Manual button
+	public void manualButtonClicked() {
 		usingGPS = false;
 	}
 
@@ -240,7 +233,7 @@ public class MainScreen extends Screen {
 			this.mContext = context;
 		}
 
-		//gets Location object for current location
+		// gets Location object for current location
 		public Location getLocation() {
 			try {
 				locationManager = (LocationManager) mContext

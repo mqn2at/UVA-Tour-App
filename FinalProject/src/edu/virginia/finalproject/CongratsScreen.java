@@ -6,10 +6,12 @@ import sofia.app.Screen;
 import sofia.util.Timer;
 
 public class CongratsScreen extends Screen {
-	private int time; 
+	///private int time;
 	private TextView clock;
-	
-	public void initialize(CongratsScreen congratsScreen) {
+
+	// public void initialize(CongratsScreen congratsScreen) {
+	public void initialize(String time) {
+		/*
 		int hour = time / 3600;
 		int min = time % 3600 / 60;
 		int sec = time % 60;
@@ -25,10 +27,8 @@ public class CongratsScreen extends Screen {
 		if (s.length() < 2) {
 			s = "0" + s;
 		}
-		clock.setText(h + ":" + m + ":" + s);
+		*/
+		clock.setText(time);
 		Timer.callOnce(this, "finish", 4000);
-	}
-	public void setTime(int time){
-		this.time = time;
 	}
 }
