@@ -51,6 +51,7 @@ public class MainScreen extends Screen {
 	private ArrayList<Stop> stops;
 	private int currentStop = 0;
 	private boolean usingGPS = true;
+	private boolean notFinished = true;
 	private double lat, lon;
 
 	public void initialize() {
@@ -85,7 +86,9 @@ public class MainScreen extends Screen {
 
 	public void clock() {
 		Location loc = gps.getLocation();
-		updatePosition(loc);
+		if (notFinished) {
+			updatePosition(loc);
+		}
 
 		time++;
 		int hour = time / 3600;
@@ -107,7 +110,6 @@ public class MainScreen extends Screen {
 	}
 
 	public void updatePosition(Location loc) {
-		// double lat, lon;
 		if (usingGPS) {
 			lat = loc.getLatitude();
 			lon = loc.getLongitude();
@@ -154,9 +156,15 @@ public class MainScreen extends Screen {
 	public void destinationReached() {
 		currentStop++;
 		if (currentStop >= stops.size()) {
-			// present congratulatory screen
+			notFinished = false;
 			timer.stop();
+
+			// present congratulatory screen
 			presentScreen(CongratsScreen.class, timeElapsed.getText());
+
+			// present last stop screen
+			presentScreen(Amphitheater.class, new Amphitheater());
+
 			// kill app
 			finish();
 		}
@@ -176,9 +184,6 @@ public class MainScreen extends Screen {
 			}
 			if (currentStop == 5) {
 				presentScreen(Clark.class, new Clark());
-			}
-			if (currentStop == 6) {
-				presentScreen(Amphitheater.class, new Amphitheater());
 			}
 
 			// update with new coordinates

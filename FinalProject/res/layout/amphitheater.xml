@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
-        android:text="Medium TextMedium TextMedium TextMedium Medium Text"
+        android:text="                                                                                                           "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFFFF" />
 
