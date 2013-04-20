@@ -57,10 +57,11 @@ public class MainScreen extends Screen {
 	public void initialize() {
 		currentStop = 0;
 		stops = new ArrayList<Stop>();
-		Stop afc = new Stop("AFC", 38.032966, -78.514148);
+		Stop afc = new Stop("AFC", 38.032966, -78.514148); // this is right
 		Stop ohill = new Stop("OHill Dining Hall", 38.034817, -78.514599);
 		Stop rotunda = new Stop("Rotunda", 38.035366, -78.503537);
-		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629); // check
+		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629); // this is
+																	// wrong
 		Stop clark = new Stop("Clark", 38.033574, -78.507625);
 		Stop amphitheatre = new Stop("Amphitheater", 38.033617, -78.505822);
 		stops.add(afc);
@@ -206,6 +207,14 @@ public class MainScreen extends Screen {
 	// Manual button
 	public void manualButtonClicked() {
 		usingGPS = false;
+	}
+
+	// Map Button
+	public void mapButtonClicked() {
+		Intent showMap = new Intent(MainScreen.this,Map.class);
+		showMap.putExtra("latitude", lat);
+		showMap.putExtra("longitude", lon);
+		startActivity(showMap);
 	}
 
 	public class GPS extends Service implements LocationListener {
