@@ -3,22 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:src="@drawable/ohill_dining" />
-
     <Button
         android:id="@+id/doneButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="19dp"
+        android:layout_marginBottom="24dp"
         android:text="Return" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/ohill_dining" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:text="You have reached Ohill Dining Hall"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="55dp"
+        android:text="The original dining hall, designed by Williams and Tazewell, opened in 1974 to serve the new dormitories nearby. An addition, designed by Robert A. M. Stern with Marcellus Wright, Cox and Smith, was completed in 1984. When the facility outgrew its capacity to handle the growing number of customers, it was impossible to renovate it because the foundation was insufficient to add a second floor. Built next to the old O-Hill building, the new, $23.5 million dining hall opened in August 2005, offering 905 indoor seats and 204 outdoor terrace seats, a 20 percent increase in seating."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="20sp" />
 
 </RelativeLayout>
