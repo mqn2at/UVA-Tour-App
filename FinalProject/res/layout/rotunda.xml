@@ -4,19 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/gilmer" />
-
     <Button
         android:id="@+id/doneButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="24dp"
         android:text="Return" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:text="You have reached the Rotunda"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/rotunda" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="33dp"
+        android:text="The Rotunda houses offices and is used for ceremonial occasions. It was designed by Thomas Jefferson as the architectural and academic heart of his community of scholars - the &quot;academical village,&quot; as he called it. Jefferson modeled the Rotunda after the Pantheon in Rome. Construction began in 1822 and was completed in 1826 at a cost of $60,000. In 1895 the Rotunda was destroyed by fire. On April 13, 1976, during the U.S. Bicentennial and on the 233rd anniversary of Jefferson&apos;s birth, the restored Rotunda was dedicated. The Rotunda appears today essentially as it did when it was built. "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="20sp" />
 
 </RelativeLayout>
