@@ -2,35 +2,24 @@ package edu.virginia.finalproject;
 
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
 import android.app.Service;
-import android.content.DialogInterface;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import sofia.app.Screen;
-import sofia.app.ScreenLayout;
 import android.annotation.SuppressLint;
 import android.widget.EditText;
-import android.text.format.*;
 import sofia.util.*;
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainScreen extends Screen {
 	private TextView currLat;
@@ -44,7 +33,6 @@ public class MainScreen extends Screen {
 	private EditText editLat;
 	private EditText editLong;
 
-	private LocationManager locMan;
 	private GPS gps;
 	private Timer timer;
 	private int time = 0;
@@ -53,16 +41,17 @@ public class MainScreen extends Screen {
 	private boolean usingGPS = true;
 	private boolean notFinished = true;
 	private double lat, lon;
+	private double prevDist = 0.0;
 
 	public void initialize() {
+		// set destinations
 		currentStop = 0;
 		stops = new ArrayList<Stop>();
-		Stop afc = new Stop("AFC", 38.032966, -78.514148); // this is right
+		Stop afc = new Stop("AFC", 38.032966, -78.514148);
 		Stop ohill = new Stop("OHill Dining Hall", 38.034817, -78.514599);
 		Stop rotunda = new Stop("Rotunda", 38.035366, -78.503537);
-		Stop rice = new Stop("Rice Hall", 38.033667, -78.510629); // this is
-																	// wrong
-		Stop clark = new Stop("Clark", 38.033574, -78.507625);
+		Stop rice = new Stop("Rice Hall", 38.0317, -78.5109);
+		Stop clark = new Stop("Clark", 38.033195,  -78.507790);
 		Stop amphitheatre = new Stop("Amphitheater", 38.033617, -78.505822);
 		stops.add(afc);
 		stops.add(ohill);
@@ -71,27 +60,39 @@ public class MainScreen extends Screen {
 		stops.add(clark);
 		stops.add(amphitheatre);
 
+		// display information on screen
 		destName.setText(stops.get(currentStop).getName());
 		destLat.setText(String.format("%.6f", stops.get(currentStop)
 				.getLatitude()));
 		destLong.setText(String.format("%.6f", stops.get(currentStop)
 				.getLongitude()));
 
+		// get current data from gps
 		gps = new GPS(this);
 		Location loc = gps.getLocation();
 		updatePosition(loc);
 
+		// present splash screen
 		presentScreen(WelcomeScreen.class, new WelcomeScreen());
+
+		// start the timer
 		timer = Timer.callRepeatedly(this, "clock", 1000);
 	}
 
+	// updates position and displays time elapsed
 	public void clock() {
+		// get current location from gps
 		Location loc = gps.getLocation();
+
+		// if tour is not finished, update the "current position"
 		if (notFinished) {
 			updatePosition(loc);
 		}
 
+		// increment time
 		time++;
+
+		// display time
 		int hour = time / 3600;
 		int min = time % 3600 / 60;
 		int sec = time % 60;
@@ -110,11 +111,15 @@ public class MainScreen extends Screen {
 		timeElapsed.setText(h + ":" + m + ":" + s);
 	}
 
+	// updates the current position
 	public void updatePosition(Location loc) {
+		// if using the gps, get coordinates from the gps
 		if (usingGPS) {
 			lat = loc.getLatitude();
 			lon = loc.getLongitude();
 		}
+
+		// if using the manual set coordinates, get coordinates from textboxes
 		else {
 			try {
 				lat = Double.parseDouble(editLat.getText() + "");
@@ -125,20 +130,32 @@ public class MainScreen extends Screen {
 				lon = 0.0;
 			}
 		}
+
+		// set TextViews to "current position"
 		currLat.setText(String.format("%.6f", lat));
 		currLong.setText(String.format("%.6f", lon));
 
+		// find distance between current position and destination in meters
 		float[] distance = new float[1];
 		Location.distanceBetween(lat, lon,
 				stops.get(currentStop).getLatitude(), stops.get(currentStop)
 						.getLongitude(), distance);
+
+		// display distance
 		dist.setText(String.format("%.3f", distance[0]));
 
+		// display hot/cold status
 		String s;
-		if (distance[0] < 5) {
+		if (prevDist != 0.0 && prevDist - distance[0] > 5) {
+			s = "getting warmer";
+		}
+		else if (prevDist != 0.0 && prevDist - distance[0] < -5) {
+			s = "getting colder";
+		}
+		else if (distance[0] < 10) {
 			s = "hot";
 		}
-		else if (distance[0] > 200) {
+		else if (distance[0] > 150) {
 			s = "cold";
 		}
 		else if (distance[0] >= 70) {
@@ -148,13 +165,19 @@ public class MainScreen extends Screen {
 			s = "warm";
 		}
 		status.setText(s);
-
-		if (distance[0] < 50) {
+		prevDist = distance[0];
+		
+		// if close enough to destination (5 meters), call method
+		// destinationReached()
+		if (distance[0] < 5) {
 			destinationReached();
 		}
 	}
 
+	// method called when a destination is reached, gives info about destination
+	// and updates next destination
 	public void destinationReached() {
+		// update the next stop
 		currentStop++;
 		if (currentStop >= stops.size()) {
 			notFinished = false;
@@ -199,24 +222,30 @@ public class MainScreen extends Screen {
 		}
 	}
 
-	// GPS button
+	// GPS button, sets the "current position" to the real current position
+	// found by the gps
 	public void gpsButtonClicked() {
 		usingGPS = true;
 	}
 
-	// Manual button
+	// Manual button, sets the "current position" to a set position entered in
+	// the text boxes
 	public void manualButtonClicked() {
 		usingGPS = false;
 	}
 
-	// Map Button
+	// Map Button, displays a map of "current position" when clicked
 	public void mapButtonClicked() {
-		Intent showMap = new Intent(MainScreen.this,Map.class);
-		showMap.putExtra("latitude", lat);
-		showMap.putExtra("longitude", lon);
+		Intent showMap = new Intent(MainScreen.this, Map.class);
+		showMap.putExtra("currLat", lat);
+		showMap.putExtra("currLong", lon);
+		showMap.putExtra("destLat", stops.get(currentStop).getLatitude());
+		showMap.putExtra("destLong", stops.get(currentStop).getLongitude());
 		startActivity(showMap);
 	}
 
+	// embedded class to find the coordinates of current position using the gps
+	// in the tablet
 	public class GPS extends Service implements LocationListener {
 
 		private final Context mContext;
